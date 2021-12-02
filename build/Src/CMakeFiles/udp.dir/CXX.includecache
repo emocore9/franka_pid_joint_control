@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../Inc/udp.hpp
+
+/home/liyuan/wjyTemp/Src/udp.cc
+udp.hpp
+-
+stdio.h
+-
+sys/types.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+unistd.h
+-
+errno.h
+-
+string.h
+-
+stdlib.h
+-
+

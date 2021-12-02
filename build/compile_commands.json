@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/liyuan/wjyTemp/build",
+  "command": "/usr/bin/g++-7   -I/home/liyuan/wjyTemp/Inc -isystem /usr/local/include  -g   -pthread -std=gnu++14 -o CMakeFiles/main.dir/main.cpp.o -c /home/liyuan/wjyTemp/main.cpp",
+  "file": "/home/liyuan/wjyTemp/main.cpp"
+},
+{
+  "directory": "/home/liyuan/wjyTemp/build/Src",
+  "command": "/usr/bin/g++-7   -I/home/liyuan/wjyTemp/Inc -isystem /usr/local/include  -g   -std=gnu++14 -o CMakeFiles/robot.dir/robot.cc.o -c /home/liyuan/wjyTemp/Src/robot.cc",
+  "file": "/home/liyuan/wjyTemp/Src/robot.cc"
+},
+{
+  "directory": "/home/liyuan/wjyTemp/build/Src",
+  "command": "/usr/bin/g++-7   -I/home/liyuan/wjyTemp/Inc -isystem /usr/local/include  -g   -std=gnu++14 -o CMakeFiles/threads.dir/threads.cc.o -c /home/liyuan/wjyTemp/Src/threads.cc",
+  "file": "/home/liyuan/wjyTemp/Src/threads.cc"
+},
+{
+  "directory": "/home/liyuan/wjyTemp/build/Src",
+  "command": "/usr/bin/g++-7   -I/home/liyuan/wjyTemp/Inc  -g   -o CMakeFiles/udp.dir/udp.cc.o -c /home/liyuan/wjyTemp/Src/udp.cc",
+  "file": "/home/liyuan/wjyTemp/Src/udp.cc"
+}
+]

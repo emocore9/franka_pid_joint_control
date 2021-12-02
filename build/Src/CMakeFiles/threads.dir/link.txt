@@ -1,0 +1,2 @@
+/usr/bin/ar qc libthreads.a  CMakeFiles/threads.dir/threads.cc.o
+/usr/bin/ranlib libthreads.a

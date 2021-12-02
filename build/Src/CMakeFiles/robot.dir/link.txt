@@ -1,0 +1,2 @@
+/usr/bin/ar qc librobot.a  CMakeFiles/robot.dir/robot.cc.o
+/usr/bin/ranlib librobot.a

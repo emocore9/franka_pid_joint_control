@@ -1,0 +1,1 @@
+/usr/bin/g++-7  -g  -rdynamic CMakeFiles/main.dir/main.cpp.o  -o main -Wl,-rpath,/usr/local/lib Src/libthreads.a -pthread Src/librobot.a /usr/local/lib/libfranka.so.0.7.1 Src/libudp.a 
