@@ -1,13 +1,11 @@
 #include<robot.hpp>
 #include<pid.hpp>
-#include<threads.hpp>
 #include<parameters.hpp>
 
 #include<franka/exception.h>
 #include<franka/robot.h>
 
 #include<queue>
-#include<array>
 #include<cmath>
 
 using namespace std;
