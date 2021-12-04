@@ -37,7 +37,7 @@ class PID{
     _integral_error(0)
     {}
 
-    ~PID(){}
+    ~PID() = default;
 
 
     double calculate(double desire_value, double feedback){

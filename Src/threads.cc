@@ -2,36 +2,31 @@
 #include<udp.hpp>
 #include<franka/robot.h>
 #include<robot.hpp>
-#include<robot.hpp>
-#include<array>
 #include<parameters.hpp>
 
-#include<stdio.h>
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
-#include<unistd.h>
-#include<errno.h>
-#include<string.h>
-#include<stdlib.h>
+
 #include<chrono>
 #include<thread>
+#include<array>
 
 using namespace std;
 
-void CSIR::thread_robot_control(const char* robot_ip, MessageQue<array<double, DOF> >& message_queue){
-    franka::Robot robot(robot_ip);
+void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, DOF> >& message_queue){
+    franka::Robot robot(robot_ip_);
     CSIR::Robot::initialize(robot);
     CSIR::Robot::robot_control(robot, message_queue);
 }
 
 
-void CSIR::thread_upd_recieve(MessageQue<array<double, DOF> >& message_queue){
+[[noreturn]] void CSIR::thread_upd_recieve(MessageQue<array<double, DOF> >& message_queue){
     int len;
 
     int sock_fd = CSIR::UDP::create_and_bind(udp_port, len);
 
-    int recv_num;
+    ssize_t recv_num;
     char recv_buf[100];
     struct sockaddr_in addr_client;
     struct timeval tv;
@@ -39,9 +34,9 @@ void CSIR::thread_upd_recieve(MessageQue<array<double, DOF> >& message_queue){
     tv.tv_usec = 100;
     setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 
-    std::array<double, DOF> JointVal;
+    std::array<double, DOF> JointVal = {0};
 
-    while (1)
+    while (true)
     {
         //start server
         recv_num = recvfrom(sock_fd, recv_buf, sizeof(recv_buf), 0, (struct sockaddr *)&addr_client, (socklen_t *)&len);
@@ -70,13 +65,10 @@ void CSIR::thread_upd_recieve(MessageQue<array<double, DOF> >& message_queue){
             JointVal[5] = joint5;
             JointVal[6] = joint6;
 
-            std::cout << JointVal[0]<<' ' <<JointVal[1]<<' '<<JointVal[2]<<' '<<JointVal[3]<<' '<<JointVal[4]<<' '<<JointVal[5]<<' '<<JointVal[6]<< std::endl;
+            //std::cout << JointVal[0]<<' ' <<JointVal[1]<<' '<<JointVal[2]<<' '<<JointVal[3]<<' '<<JointVal[4]<<' '<<JointVal[5]<<' '<<JointVal[6]<< std::endl;
             message_queue.put(JointVal);
-        }else{
-            continue;
         }
 
         this_thread::sleep_for(1ms);
-    
     }
 }

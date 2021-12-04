@@ -51,11 +51,15 @@ class MessageQue{
         _queue.pop();
         return true;
     }
+
+    int size(){
+        return _queue.size();
+    }
 };
 
 void thread_robot_control(const char* arg_robot, MessageQue<std::array<double, DOF> >& message_queue);
 
-void thread_upd_recieve(MessageQue<std::array<double, DOF> >& message_queue);
+[[noreturn]] void thread_upd_recieve(MessageQue<std::array<double, DOF> >& message_queue);
 
 };
 
