@@ -1,6 +1,7 @@
 #include<threads.hpp>
 #include<udp.hpp>
 #include<franka/robot.h>
+#include<franka/gripper.h>
 #include<robot.hpp>
 #include<parameters.hpp>
 
@@ -11,8 +12,13 @@
 #include<chrono>
 #include<thread>
 #include<array>
+#include<mutex>
+
+#include<json.hpp>
 
 using namespace std;
+using namespace nlohmann;
+
 
 void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, DOF> >& message_queue){
     franka::Robot robot(robot_ip_);
@@ -20,14 +26,68 @@ void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, 
     CSIR::Robot::robot_control(robot, message_queue);
 }
 
+int CSIR::thread_gripper_control(condition_variable& condition, bool& if_grasp){
 
-[[noreturn]] void CSIR::thread_upd_recieve(MessageQue<array<double, DOF> >& message_queue){
+    mutex m;
+    unique_lock<mutex> lk(m);
+
+    try{
+       //initialize
+       double grasping_width = 0.02;
+       franka::Gripper gripper(robot_ip);
+
+       while(true) {
+            gripper.homing();
+            condition.wait(lk, [&]{return if_grasp;});
+
+           // Check for the maximum grasping width.
+           franka::GripperState gripper_state = gripper.readOnce();
+           cout<<gripper_state.max_width<<endl;
+           if (gripper_state.max_width < grasping_width) {
+               std::cout << "Object is too large for the current fingers on the gripper." << std::endl;
+               continue;
+           }
+           // Grasp the object.
+           if (!gripper.grasp(grasping_width, 0.1, 100, 0.05, 0.06)) {
+               std::cout << "Failed to grasp object." << std::endl;
+               continue;
+           }
+
+           // wait until if the object is still grasped
+           while(true){
+               gripper_state = gripper.readOnce();
+               if(!gripper_state.is_grasped){
+                   cout<<"Object lost"<<endl;
+                   break;
+               }
+
+               if(!if_grasp){
+                   break;
+               }
+
+               this_thread::sleep_for(chrono::milliseconds(300));
+           }
+
+           gripper.stop();
+
+       }
+
+   }catch (franka::Exception const& e) {
+       std::cout << e.what() << std::endl;
+       return -1;
+   }
+}
+
+
+
+
+[[noreturn]] void CSIR::thread_upd_recieve(MessageQue<array<double, DOF> >& message_queue, condition_variable& condition, bool& if_grasp){
     int len;
 
     int sock_fd = CSIR::UDP::create_and_bind(udp_port, len);
 
     ssize_t recv_num;
-    char recv_buf[100];
+    char recv_buf[200];
     struct sockaddr_in addr_client;
     struct timeval tv;
     tv.tv_sec = 0;
@@ -42,21 +102,19 @@ void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, 
         recv_num = recvfrom(sock_fd, recv_buf, sizeof(recv_buf), 0, (struct sockaddr *)&addr_client, (socklen_t *)&len);
         if(recv_num > 0){
             recv_buf[recv_num] = '\0';
-            std::string joints = recv_buf;
-            std::string str0 = joints.substr(1,12);
-            std::string str1 = joints.substr(13,12);
-            std::string str2 = joints.substr(25,12);
-            std::string str3 = joints.substr(37,12);
-            std::string str4 = joints.substr(49,12);
-            std::string str5 = joints.substr(61,12);
-            std::string str6 = joints.substr(73,6);
-            double joint0 = std::stod(str0);
-            double joint1 = std::stod(str1);
-            double joint2 = std::stod(str2);
-            double joint3 = std::stod(str3);
-            double joint4 = std::stod(str4);
-            double joint5 = std::stod(str5);
-            double joint6 = std::stod(str6);
+            std::string data = recv_buf;
+
+            auto j = json::parse(data);
+            auto joints = j["joints"];
+            double _if_grasp = j["gripper"];
+
+            double joint0 = joints[0];
+            double joint1 = joints[1];
+            double joint2 = joints[2];
+            double joint3 = joints[3];
+            double joint4 = joints[4];
+            double joint5 = joints[5];
+            double joint6 = joints[6];
             JointVal[0] = joint0;
             JointVal[1] = joint1;
             JointVal[2] = joint2;
@@ -65,8 +123,13 @@ void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, 
             JointVal[5] = joint5;
             JointVal[6] = joint6;
 
+            //send information
             //std::cout << JointVal[0]<<' ' <<JointVal[1]<<' '<<JointVal[2]<<' '<<JointVal[3]<<' '<<JointVal[4]<<' '<<JointVal[5]<<' '<<JointVal[6]<< std::endl;
             message_queue.put(JointVal);
+
+            //send grasp
+            if_grasp = bool(_if_grasp);
+            condition.notify_all();
         }
 
         this_thread::sleep_for(1ms);

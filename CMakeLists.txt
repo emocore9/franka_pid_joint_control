@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(Template VERSION 0.1.0)
+project(csir_franka_control VERSION 0.1.0)
 
 include(CTest)
 enable_testing()
@@ -20,6 +20,7 @@ include_directories(Inc)
 
 #compile library
 add_subdirectory(Src)
+add_subdirectory(Test)
 
 
 #

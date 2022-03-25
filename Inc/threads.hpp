@@ -7,7 +7,7 @@
 #include<mutex>
 
 #include<parameters.hpp>
-
+#include<condition_variable>
 namespace CSIR{
 
 /**
@@ -58,8 +58,8 @@ class MessageQue{
 };
 
 void thread_robot_control(const char* arg_robot, MessageQue<std::array<double, DOF> >& message_queue);
-
-[[noreturn]] void thread_upd_recieve(MessageQue<std::array<double, DOF> >& message_queue);
+[[noreturn]] void thread_upd_recieve(MessageQue<std::array<double, DOF> >& message_queue, std::condition_variable& condition, bool& if_grasp);
+int thread_gripper_control(std::condition_variable& condition, bool& if_grasp);
 
 };
 

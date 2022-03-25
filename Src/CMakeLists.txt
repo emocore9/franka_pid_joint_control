@@ -1,7 +1,8 @@
 set(CSIR_LIBRARY 
     robot
     threads 
-    udp 
+    udp
+    examples_common
 )
 
 foreach(library ${CSIR_LIBRARY})
@@ -9,4 +10,5 @@ foreach(library ${CSIR_LIBRARY})
 endforeach()
 
 target_link_libraries(threads Franka::Franka robot udp)
-target_link_libraries(robot Franka::Franka)
+target_link_libraries(robot Franka::Franka examples_common)
+target_link_libraries(examples_common Eigen3::Eigen Franka::Franka)

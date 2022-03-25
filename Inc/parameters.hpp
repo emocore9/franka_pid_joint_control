@@ -1,7 +1,7 @@
 #ifndef _PARAMETERS_HPP_
 #define _PARAMETERS_HPP_
 
-#define INITIAL_ANGLE_STATE {0, -M_PI_4, 0, -3 * M_PI_4, 0, M_PI, M_PI_4}
+#define INITIAL_ANGLE_STATE {0, -M_PI_4, 0, -3 * M_PI_4, 0, M_PI_2, M_PI_4}
 
 
 #include<cmath>
