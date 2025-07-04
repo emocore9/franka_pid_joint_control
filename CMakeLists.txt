@@ -8,6 +8,7 @@ add_executable(main main.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};$ENV{HOME}/local")
 include(CPack)
 
 
@@ -21,7 +22,8 @@ include_directories(Inc)
 #compile library
 add_subdirectory(Src)
 add_subdirectory(Test)
-
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE Eigen3::Eigen)
 
 #
 target_link_libraries(main Threads::Threads threads)
