@@ -14,6 +14,11 @@
 #include<array>
 #include<mutex>
 
+/****/
+#include <arpa/inet.h>
+#include <unistd.h>      // for close()
+/****/
+
 #include<json.hpp>
 
 using namespace std;
@@ -22,8 +27,25 @@ using namespace nlohmann;
 
 void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, DOF> >& message_queue){
     franka::Robot robot(robot_ip_);
+
+/*
+    // UDP sender
+    int udp_sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if (udp_sock < 0) {
+        perror("Failed to create UDP socket");
+        return;
+    }
+    struct sockaddr_in dest_addr{};
+    dest_addr.sin_family = AF_INET;
+    dest_addr.sin_port = htons(2233);  // target udp port
+    inet_pton(AF_INET, "192.168.1.50", &dest_addr.sin_addr);  // target IP
+*/
+
+
     CSIR::Robot::initialize(robot);
     CSIR::Robot::robot_control(robot, message_queue);
+
+    close(udp_sock);
 }
 
 int CSIR::thread_gripper_control(condition_variable& condition, bool& if_grasp){
@@ -106,7 +128,7 @@ int CSIR::thread_gripper_control(condition_variable& condition, bool& if_grasp){
 
             auto j = json::parse(data);
             auto joints = j["joints"];
-            double _if_grasp = j["gripper"];
+            bool _if_grasp = j["gripper"];
 
             double joint0 = joints[0];
             double joint1 = joints[1];

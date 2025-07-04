@@ -68,6 +68,35 @@ void CSIR::Robot::robot_control(franka::Robot& robot,
                                                   pid_optimizers,
                                                   previous_setting_angles);
 
+
+
+        /****/
+        // update global joint state
+        std::lock_guard<std::mutex> lk(g_q_mutex);
+        std::copy(robot_state.q.begin(),
+        robot_state.q.end(),
+        g_latest_q.begin());
+        /****/
+        
+    /*
+       try {
+           nlohmann::json j;
+           j["joints"] = std::vector<double>(
+             robot_state.q.begin(), robot_state.q.end()
+           ); // real gripper state
+           j["gripper"] = 0;  // fake gripper state
+           std::string msg = j.dump();
+           sendto(udp_sock,
+                  msg.c_str(),
+                  static_cast<int>(msg.size()),
+                  0,
+                  reinterpret_cast<struct sockaddr*>(&dest_addr),
+                  sizeof(dest_addr));
+            }
+            catch (const std::exception& e) {
+          //print error
+                }
+    */
         return ret;
     });
 
