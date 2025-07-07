@@ -23,6 +23,7 @@
 
 using namespace std;
 using namespace nlohmann;
+using namespace std::chrono_literals;
 
 
 void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, DOF> >& message_queue){
@@ -45,7 +46,7 @@ void CSIR::thread_robot_control(const char* robot_ip_, MessageQue<array<double, 
     CSIR::Robot::initialize(robot);
     CSIR::Robot::robot_control(robot, message_queue);
 
-    close(udp_sock);
+    close(sock);
 }
 
 int CSIR::thread_gripper_control(condition_variable& condition, bool& if_grasp){
