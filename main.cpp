@@ -11,7 +11,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <nlohmann/json.hpp>
+#include <json.hpp>
 
 // global joint angle state
 std::array<double, 7> g_latest_q{};

@@ -6,6 +6,7 @@ enable_testing()
 
 add_executable(main main.cpp)
 
+set (CMAKE_CXX_STANDARD 11)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};$ENV{HOME}/local")
