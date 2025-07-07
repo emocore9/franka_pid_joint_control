@@ -35,9 +35,9 @@ set(SOURCES
   # other.cc
 )
 
-add_executable(test0 ${SOURCES})
+add_executable(my_app ${SOURCES})
 
-target_include_directories(test0
+target_include_directories(my_app
   PRIVATE
     $ENV{HOME}/local/include/eigen3
 )
