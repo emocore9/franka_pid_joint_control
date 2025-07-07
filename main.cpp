@@ -13,7 +13,7 @@
 #include <arpa/inet.h>
 #include <json.hpp>
 #include <unistd.h>
-#include <globals.hpp>   // 引入 extern 声明
+#include <global.hpp>   // 引入 extern 声明
 
 // global joint angle state
 std::array<double, 7> g_latest_q{};

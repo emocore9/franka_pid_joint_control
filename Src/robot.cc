@@ -9,7 +9,7 @@
 #include <queue>
 #include <cmath>
 
-#include <globals.hpp>
+#include <global.hpp>
 
 using namespace std;
 
