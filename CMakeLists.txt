@@ -43,7 +43,7 @@ target_include_directories(my_app
 )
 ####
 
-target_link_libraries(my_app PRIVATE Eigen3::Eigen)
+target_link_libraries(my_app PRIVATE Eigen3::Eigen Threads::Threads threads Franka::Franka )
 
 #
 target_link_libraries(main Threads::Threads threads)
