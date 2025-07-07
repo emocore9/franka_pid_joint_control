@@ -23,7 +23,7 @@ include_directories(Inc)
 #compile library
 add_subdirectory(Src)
 add_subdirectory(Test)
-add_executable(my_app main.cpp)
+# add_executable(my_app main.cpp)
 
 #### hanxi changed
 set(SOURCES
@@ -37,7 +37,7 @@ set(SOURCES
 
 add_executable(test0 ${SOURCES})
 
-target_include_directories(csir_franka_control
+target_include_directories(test0
   PRIVATE
     $ENV{HOME}/local/include/eigen3
 )
