@@ -9,6 +9,8 @@
 #include <queue>
 #include <cmath>
 
+#include <globals.hpp>
+
 using namespace std;
 
 void CSIR::Robot::initialize(franka::Robot& robot){
