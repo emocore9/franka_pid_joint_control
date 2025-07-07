@@ -25,12 +25,18 @@ add_subdirectory(Src)
 add_subdirectory(Test)
 add_executable(my_app main.cpp)
 
-# hanxi added
-add_executable(my_app src/threads.cc)
-add_executable(my_app src/robot.cc)
-add_executable(my_app src/udp.cc)
-add_executable(my_app src/gripper_test.cc)
-target_include_directories(my_app PRIVATE ${PROJECT_SOURCE_DIR}/include)
+#### hanxi changed
+set(SOURCES
+  main.cpp
+  Src/threads.cc
+  Src/robot.cc
+  Src/udp.cc
+  Src/examples_common.cc
+  Src/gripper_test.cc
+  # other.cc
+)
+
+add_executable(my_app ${SOURCES})
 ####
 
 target_link_libraries(my_app PRIVATE Eigen3::Eigen)
