@@ -32,11 +32,10 @@ set(SOURCES
   Src/robot.cc
   Src/udp.cc
   Src/examples_common.cc
-  Src/gripper_test.cc
   # other.cc
 )
 
-add_executable(my_app ${SOURCES})
+add_executable(test0 ${SOURCES})
 ####
 
 target_link_libraries(my_app PRIVATE Eigen3::Eigen)
