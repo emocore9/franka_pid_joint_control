@@ -11,7 +11,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include <unistd.h>
 #include <global.hpp>   // 引入 extern 声明
 
@@ -24,6 +24,7 @@ std::atomic<bool>      g_running{true};
 
 using namespace std;
 using namespace CSIR;
+using nlohmann::json;
 
 int main(int argc, char** argv){
     MessageQue<array<double, DOF> > q;
