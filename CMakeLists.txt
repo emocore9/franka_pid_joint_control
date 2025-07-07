@@ -24,8 +24,20 @@ include_directories(Inc)
 add_subdirectory(Src)
 add_subdirectory(Test)
 add_executable(my_app main.cpp)
+
+# hanxi added
+add_executable(my_app src/threads.cc)
+add_executable(my_app src/robot.cc)
+add_executable(my_app src/udp.cc)
+add_executable(my_app src/gripper_test.cc)
+target_include_directories(my_app PRIVATE ${PROJECT_SOURCE_DIR}/include)
+####
+
 target_link_libraries(my_app PRIVATE Eigen3::Eigen)
 
 #
 target_link_libraries(main Threads::Threads threads)
+
+
+
 
