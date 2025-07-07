@@ -36,6 +36,11 @@ set(SOURCES
 )
 
 add_executable(test0 ${SOURCES})
+
+target_include_directories(csir_franka_control
+  PRIVATE
+    $ENV{HOME}/local/include/eigen3
+)
 ####
 
 target_link_libraries(my_app PRIVATE Eigen3::Eigen)
