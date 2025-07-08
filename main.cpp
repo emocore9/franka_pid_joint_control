@@ -42,7 +42,7 @@ int main(int argc, char** argv){
         struct sockaddr_in addr{};
         addr.sin_family = AF_INET;
         addr.sin_port   = htons(2233); // target port
-        inet_pton(AF_INET, "192.168.1.50", &addr.sin_addr);  //target IP
+        inet_pton(AF_INET, "192.168.10.1", &addr.sin_addr);  //target IP
 
         while (g_running) {
             this_thread::sleep_for(chrono::milliseconds(10));
